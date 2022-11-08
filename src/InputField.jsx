@@ -1,13 +1,14 @@
 import { useState } from "react";
 
 
-export default function InputField(hasInput){
+export default function InputField(props){
 
     const [item, setItem] = useState("");
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        hasInput = item.length > 0 ? true : false;
+        let checkInput = item.length > 0 ? true : false
+        !checkInput && props.notify("Please Enter Items To Add To Basket");
     }
 
     return (

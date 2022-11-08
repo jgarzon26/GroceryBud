@@ -3,12 +3,13 @@ import InputField from './InputField';
 
 function App() {
 
-  const [hasInput, hasUserInput] = useState(false);
+  const [notification, notifyUser] = useState("");
   
   return (
     <section>
+      <h3>{notification}</h3>
       <h1>Grocery Bud</h1>
-      <InputField hasInput = {hasUserInput} />
+      <InputField notify = {notify => notifyUser(notify)} />
     </section>
   );
 }
