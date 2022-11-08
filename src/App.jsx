@@ -6,11 +6,18 @@ function App() {
 
   const [notification, notifyUser] = useState("");
   const [item, setItem] = useState("");
+  const [itemList, setItemList] = useState([]);
 
   const handleSubmit = (event) => {
       event.preventDefault();
       let checkInput = item.length > 0 ? true : false
-      !checkInput && props.notify("Please Enter Items To Add To Basket");
+      if(checkInput){
+        setItemList([...itemList, <Item item = {item} />]);
+        notifyUser(`'${item}' Added To The Basket`);
+        setItem("");
+      }
+      else
+        notifyUser("Please Enter Items To Add To Basket");
   }
     
   return (
@@ -24,7 +31,7 @@ function App() {
           <button type = "submit">Submit</button>
       </form>
       <ul>
-        
+        {itemList}
       </ul>
     </section>
   );
