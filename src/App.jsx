@@ -8,9 +8,11 @@ function App() {
   const [notification, notifyUser] = useState("");
   const [item, setItem] = useState("");
   const [itemList, setItemList] = useState([]);
-  const [submitButton, changeSubmitButton] = useState("Submit");
 
-  const handleSubmit = (event) => {
+  const [submitButton, changeSubmitButton] = useState("Submit");
+  const [handler, changeHandler] = useState(handleSubmit);
+
+  const handleSubmit = event => {
       event.preventDefault();// prevent page refresh
       let checkInput = item.length > 0 ? true : false
       if(checkInput){
@@ -22,16 +24,28 @@ function App() {
         notifyUser("Please Enter Items To Add To Basket");
   }
 
-  const editItem = currentItem => {
-    setItem(currentItem);
+  const handleEdit = event => {
+    event.preventDefault();
+    //change item of selected element
+
+    changeSubmitButton("Submit");
+    changeHandler(handleSubmit);
+    notifyUser(`Item Changed To '${item}'`);
+    setItem("");
+  }
+
+  const editItem = ({item}) => {
+    alert(item);
+    setItem(item);
     changeSubmitButton("Edit");
+    changeHandler(handleEdit);
   }
     
   return (
     <section>
       <h3>{notification}</h3>
       <h1>Grocery Bud</h1>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handler}>
           <label>
           <input 
             type = "text" 
