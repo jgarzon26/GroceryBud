@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react'
 import Item from './Item'
 
-var listID = 0;
+let listID = 0;
+let selectedIndexForEdit = 0;
 
 function App() {
-
   const [notification, notifyUser] = useState("");
   const [item, setItem] = useState("");
   const [itemList, setItemList] = useState([]);
 
   const [submitButton, changeSubmitButton] = useState("Submit");
+  const [button, switchButton] = useState(0);
 
   const handleSubmit = event => {
       event.preventDefault();// prevent page refresh
@@ -23,23 +24,28 @@ function App() {
         notifyUser("Please Enter Items To Add To Basket");
   }
 
-  const [handler, changeHandler] = useState(() => handleSubmit);
-
   const handleEdit = event => {
     event.preventDefault();
-    //change item of selected element
-
+    itemList[selectedIndexForEdit].item = item;
     changeSubmitButton("Submit");
-    changeHandler(() => handleSubmit);
+    switchButton(0);
     notifyUser(`Item Changed To '${item}'`);
     setItem("");
   }
 
-  const editItem = ({item}) => {
-    alert(itemList.indexOf(item));
-    setItem(item);
+  let handler = button == 0 ? handleSubmit : handleEdit;
+
+  const editItem = (props) => {
+    for(let i = 0; i < itemList.length; i++){
+      if(itemList[i].id == props.id){
+        selectedIndexForEdit = i;
+        break;
+      }
+    }
+
+    setItem(props.item);
     changeSubmitButton("Edit");
-    changeHandler(() => handleEdit);
+    switchButton(1);
   }
     
   return (
