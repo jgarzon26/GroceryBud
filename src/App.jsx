@@ -10,7 +10,6 @@ function App() {
   const [itemList, setItemList] = useState([]);
 
   const [submitButton, changeSubmitButton] = useState("Submit");
-  const [handler, changeHandler] = useState(handleSubmit);
 
   const handleSubmit = event => {
       event.preventDefault();// prevent page refresh
@@ -24,21 +23,23 @@ function App() {
         notifyUser("Please Enter Items To Add To Basket");
   }
 
+  const [handler, changeHandler] = useState(() => handleSubmit);
+
   const handleEdit = event => {
     event.preventDefault();
     //change item of selected element
 
     changeSubmitButton("Submit");
-    changeHandler(handleSubmit);
+    changeHandler(() => handleSubmit);
     notifyUser(`Item Changed To '${item}'`);
     setItem("");
   }
 
   const editItem = ({item}) => {
-    alert(item);
+    alert(itemList.indexOf(item));
     setItem(item);
     changeSubmitButton("Edit");
-    changeHandler(handleEdit);
+    changeHandler(() => handleEdit);
   }
     
   return (
