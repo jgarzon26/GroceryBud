@@ -3,14 +3,17 @@ import Item from './Item'
 
 let listID = 0;
 let selectedIndexForEdit = 0;
+const countDownTimerForNotify = 3;
 
 function App() {
+  const [counter, setCounter] = useState(0);
+
   const [notification, notifyUser] = useState("");
   const [item, setItem] = useState("");
   const [itemList, setItemList] = useState([]);
 
   const [submitButton, changeSubmitButton] = useState("Submit");
-  const [button, switchButton] = useState(0);
+  const [button, switchButton] = useState(0); // 0 - submit | 1 - edit
 
   const handleSubmit = event => {
       event.preventDefault();// prevent page refresh
@@ -48,6 +51,11 @@ function App() {
     notifyUser(`'${props.item}' Removed From The Basket`);
   }
 
+  const clearAll = () => {
+    setItemList([]);
+    notifyUser("Basket Is Empty");
+  }
+
   const getCurrentIndexOfItem = (props) => {
     for(let i = 0; i < itemList.length; i++){
       if(itemList[i].id == props.id){
@@ -56,6 +64,17 @@ function App() {
       }
     }
   }
+
+  useEffect(() => {
+    if(notification.length > 0){
+      setTimeout(() => setCounter(counter => counter + 1), 1000 * countDownTimerForNotify);
+      if(counter == countDownTimerForNotify)
+      {
+        notifyUser("");
+        setCounter(0);
+      }
+    }
+  }, [notification, counter])
     
   return (
     <section>
@@ -79,6 +98,7 @@ function App() {
           )
         )}
       </ul>
+      <button onClick = {clearAll} >Clear Items</button>
     </section>
   );
 }
