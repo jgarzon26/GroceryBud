@@ -75,6 +75,15 @@ function App() {
       }
     }
   }, [notification, counter])
+
+  useEffect(() => {
+    const itemlist = JSON.parse(localStorage.getItem("itemlist"));
+    itemlist.length > 0 && setItemList(itemlist);
+  },[])
+
+  useEffect(() => {
+    localStorage.setItem("itemlist", JSON.stringify(itemList));    
+  }, [itemList])
     
   return (
     <section>
