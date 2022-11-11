@@ -42,6 +42,12 @@ function App() {
     switchButton(1);
   }
 
+  const deleteItem = (props) => {
+    getCurrentIndexOfItem(props);
+    itemList.splice(selectedIndexForEdit, 1);
+    notifyUser(`'${props.item}' Removed From The Basket`);
+  }
+
   const getCurrentIndexOfItem = (props) => {
     for(let i = 0; i < itemList.length; i++){
       if(itemList[i].id == props.id){
@@ -69,7 +75,7 @@ function App() {
       <ul>
         {itemList.map(
           item => (
-            <Item id = {item.id} item = {item.item} changeItemFunc = {editItem} />
+            <Item id = {item.id} item = {item.item} changeItemFunc = {editItem} deleteItemFunc = {deleteItem} />
           )
         )}
       </ul>
