@@ -4,6 +4,7 @@ import Item from './Item'
 let listID = 0;
 let selectedIndexForEdit = 0;
 const countDownTimerForNotify = 3;
+let timer = null;
 
 function App() {
   const [counter, setCounter] = useState(0);
@@ -19,6 +20,7 @@ function App() {
       event.preventDefault();// prevent page refresh
       let checkInput = item.length > 0 ? true : false
       if(checkInput){
+        checkTimerIsRunning();
         setItemList([...itemList, {id: listID++, item: item}]);
         notifyUser(`'${item}' Added To The Basket`);
         setItem("");
@@ -29,11 +31,20 @@ function App() {
 
   const handleEdit = event => {
     event.preventDefault();
+    checkTimerIsRunning();
     itemList[selectedIndexForEdit].item = item;
     changeSubmitButton("Submit");
     switchButton(0);
     notifyUser(`Item Changed To '${item}'`);
     setItem("");
+  }
+
+  const checkTimerIsRunning = () => {
+    if(timer != null)
+    {
+      clearTimeout(timer);
+      timer = null;
+    }
   }
 
   let handler = button == 0 ? handleSubmit : handleEdit;
@@ -46,6 +57,7 @@ function App() {
   }
 
   const deleteItem = (props) => {
+    checkTimerIsRunning();
     getCurrentIndexOfItem(props);
     itemList.splice(selectedIndexForEdit, 1);
     notifyUser(`'${props.item}' Removed From The Basket`);
@@ -67,7 +79,7 @@ function App() {
 
   useEffect(() => {
     if(notification.length > 0){
-      setTimeout(() => setCounter(counter => counter + 1), 1000 * countDownTimerForNotify);
+      timer = setTimeout(() => setCounter(counter => counter + 1), 1000 * countDownTimerForNotify);
       if(counter == countDownTimerForNotify)
       {
         notifyUser("");
