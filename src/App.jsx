@@ -33,6 +33,7 @@ function App() {
     event.preventDefault();
     checkTimerIsRunning();
     itemList[selectedIndexForEdit].item = item;
+    localStorage.setItem("itemlist", JSON.stringify(itemList));  
     changeSubmitButton("Submit");
     switchButton(0);
     notifyUser(`Item Changed To '${item}'`);
@@ -60,6 +61,7 @@ function App() {
     checkTimerIsRunning();
     getCurrentIndexOfItem(props);
     itemList.splice(selectedIndexForEdit, 1);
+    localStorage.setItem("itemlist", JSON.stringify(itemList));  
     notifyUser(`'${props.item}' Removed From The Basket`);
   }
 
