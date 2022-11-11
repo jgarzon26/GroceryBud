@@ -5,6 +5,8 @@ let listID = 0;
 let selectedIndexForEdit = 0;
 const countDownTimerForNotify = 3;
 let timer = null;
+let alertStyle = "";
+
 
 function App() {
   const [counter, setCounter] = useState(0);
@@ -22,16 +24,21 @@ function App() {
       if(checkInput){
         checkTimerIsRunning();
         setItemList([...itemList, {id: listID++, item: item}]);
+        alertStyle = "alert alert-success";
         notifyUser(`'${item}' Added To The Basket`);
         setItem("");
       }
       else
+      {
         notifyUser("Please Enter Items To Add To Basket");
+        alertStyle = "alert alert-danger";
+      }
   }
 
   const handleEdit = event => {
     event.preventDefault();
     checkTimerIsRunning();
+    alertStyle = "alert alert-success";
     itemList[selectedIndexForEdit].item = item;
     localStorage.setItem("itemlist", JSON.stringify(itemList));  
     changeSubmitButton("Submit");
@@ -62,12 +69,15 @@ function App() {
     getCurrentIndexOfItem(props);
     itemList.splice(selectedIndexForEdit, 1);
     localStorage.setItem("itemlist", JSON.stringify(itemList));  
+    alertStyle = "alert alert-success";
     notifyUser(`'${props.item}' Removed From The Basket`);
   }
 
   const clearAll = () => {
     setItemList([]);
+    alertStyle = "alert alert-success";
     notifyUser("Basket Is Empty");
+    alertStyle = "alert alert-success";
   }
 
   const getCurrentIndexOfItem = (props) => {
@@ -86,6 +96,7 @@ function App() {
       {
         notifyUser("");
         setCounter(0);
+        alertStyle = "";
       }
     }
   }, [notification, counter])
@@ -100,29 +111,34 @@ function App() {
   }, [itemList])
     
   return (
-    <section>
-      <h3>{notification}</h3>
-      <h1>Grocery Bud</h1>
-      <form onSubmit={handler}>
-          <label>
-          <input 
-            type = "text" 
-            value = {item} 
-            onChange = {input => setItem(input.target.value) } 
-            placeholder = "e.g. eggs" 
-          />
-          </label>
-          <button type = "submit">{submitButton}</button>
-      </form>
-      <ul>
-        {itemList.map(
-          item => (
-            <Item id = {item.id} item = {item.item} changeItemFunc = {editItem} deleteItemFunc = {deleteItem} />
-          )
-        )}
-      </ul>
-      <button onClick = {clearAll} >Clear Items</button>
-    </section>
+    <div className = "d-flex flex-column min-vh-100 justify-content-center align-items-center">
+      <section className='p-5 card border border-info border-1 shadow-lg'>
+        <h3 className = {`${alertStyle}`}>{notification}</h3>
+        <h1 className ='card-header card-title text-center'>Grocery Bud</h1>
+        <div className='card-body'>
+          <form onSubmit={handler} className="flex flex-column flex-wrap">
+              <label>
+              <input 
+                className='form-control form-control-lg input'
+                type = "text" 
+                value = {item} 
+                onChange = {input => setItem(input.target.value) } 
+                placeholder = "e.g. eggs" 
+              />
+              </label>
+              <button type = "submit" className='btn btn-outline-success me-4 px-4'>{submitButton}</button>
+          </form>
+          <ul className='list-group'>
+            {itemList.map(
+              item => (
+                <Item id = {item.id} item = {item.item} changeItemFunc = {editItem} deleteItemFunc = {deleteItem} />
+              )
+            )}
+          </ul>
+        </div>
+        <button onClick = {clearAll} className = "btn btn-outline-danger" >Clear Items</button>
+      </section>
+    </div>
   );
 }
 
